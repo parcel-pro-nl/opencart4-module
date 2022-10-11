@@ -1,0 +1,405 @@
+{{ header }}{{ column_left }}
+
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="float-end">
+                <button type="submit" form="form-shipping" data-toggle="tooltip" title="{{ button_save }}"
+                        class="btn btn-primary"><i class="fa fa-save"></i></button>
+                <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i
+                            class="fa fa-reply"></i></a></div>
+            <h1>{{ heading_title }}</h1>
+            <ul class="breadcrumb">
+                {% for breadcrumb in breadcrumbs %}
+                    <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        {% if error_warning %}
+            <div class="alert alert-danger alert-dismissible"><i
+                        class="fa fa-exclamation-circle"></i> {{ error_warning }}
+            </div>
+        {% endif %}
+        {% if success %}
+            <div class="alert alert-success alert-dismissible"><i
+                        class="fa fa-exclamation-circle"></i> {{ success }}
+            </div>
+        {% endif %}
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+            </div>
+            <div class="card-body">
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-shipping"
+                      class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <button class="text-start nav-link active"  data-bs-toggle="pill" data-bs-target="#tab-general" type="button" role="tab">{{ tab_general }}</button>
+                                {% for key, shipmentOption in shipmentOptions %}
+                                    <button class="text-start nav-link"  data-bs-toggle="pill" data-bs-target="#{{ key }}" type="button" role="tab">{{ shipmentOption }}</button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tab-general">
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 control-form-label"
+                                               for="entry_version">{{ entry_version }}</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="text_version" value="{{ text_version }}"
+                                                   placeholder="{{ text_version }}" id="input-sort-order" disabled
+                                                   class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 control-form-label"
+                                               for="input-status">{{ entry_status }}</label>
+                                        <div class="col-sm-10">
+                                            <select name="shipping_parcel_pro_status" id="input-status"
+                                                    class="form-select">
+                                                {% if shipping_parcel_pro_status %}
+                                                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                                                    <option value="0">{{ text_disabled }}</option>
+                                                {% else %}
+                                                    <option value="1">{{ text_enabled }}</option>
+                                                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 control-form-label"
+                                               for="input-order-status">{{ entry_auto_export_status }}</label>
+                                        <div class="col-sm-10">
+                                            <select name="shipping_parcel_pro_auto_export_status" id="input-status"
+                                                    class="form-select">
+                                                <option selected></option>
+                                                {% for order_status in order_statuses %}
+                                                    <option value="{{ order_status.order_status_id }}" {% if order_status.order_status_id == shipping_parcel_pro_auto_export_status %} selected="selected" {% endif %}>{{ order_status.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 control-form-label"
+                                               for="input-shipping-heading">{{ entry_shipping_heading }}</label>
+                                        <div class="col-sm-10">
+                                            {% for language in languages %}
+                                                <div class="col-sm-1" style="padding:0; line-height:30px;"><img
+                                                            src="language/{{ language.code }}/{{ language.code }}.png">
+                                                </div>
+                                                <div class="col-sm-11" style="padding:0;">
+                                                    <input type="text"
+                                                           name="shipping_parcel_pro_heading[{{ language.code }}]"
+                                                           value="{{ attribute(shipping_parcel_pro_heading, language.code) }}"
+                                                           placeholder="{{ attribute(parcel_pro_heading, language.code) }}"
+                                                           id="input-sort-order" class="form-control"/>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-sm-2 control-form-label"
+                                               for="input-sort-order">{{ entry_sort_order }}</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="shipping_parcel_pro_sort_order"
+                                                   value="{{ parcel_pro_sort_order }}" id="input-sort-order"
+                                                   class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input style="display:none" type="hidden" name="shipping_parcel_pro_loaded_types"
+                                       value='{{ shipping_parcel_pro_loaded_types }}' id="input-loaded-type"
+                                       size="100000"></input>
+                                {% for key, shipmentOption in config %}
+
+                                    <div class="tab-pane fade" id="tab_type_id_{{ key }}">
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 control-form-label"
+                                                   for="input-status">{{ entry_status }}</label>
+                                            <div class="col-sm-10">
+                                                <select name="shipping_parcel_pro_type_id_{{ key }}_status"
+                                                        id="input-status" class="form-select">
+                                                    {% if shipmentOption.status %}
+                                                        <option value="1"
+                                                                selected="selected">{{ text_enabled }}</option>
+                                                        <option value="0">{{ text_disabled }}</option>
+                                                    {% else %}
+                                                        <option value="1">{{ text_enabled }}</option>
+                                                        <option value="0"
+                                                                selected="selected">{{ text_disabled }}</option>
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 control-form-label"
+                                                   for="input-tax-class">{{ entry_tax_class }}</label>
+                                            <div class="col-sm-10">
+                                                <select name="shipping_parcel_pro_type_id_{{ key }}_tax_class_id"
+                                                        id="input-tax-class" class="form-select">
+
+                                                    <option selected value="0"></option>
+                                                    {% for tax_class in tax_classes %}
+                                                        {% if tax_class.tax_class_id == shipmentOption.tax_class_id %}
+                                                            <option value="{{ tax_class.tax_class_id }}"
+                                                                    selected="selected">{{ tax_class.title }}</option>
+                                                        {% else %}
+                                                            <option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-sm-2 control-form-label"
+                                                   for="input-sort-order">{{ entry_sort_order }}</label>
+                                            <div class="col-sm-10">
+                                                <input type="text"
+                                                       name="shipping_parcel_pro_type_id_{{ key }}_sort_order"
+                                                       value="{{ shipmentOption.sort_order }}" id="input-sort-order"
+                                                       class="form-control"/>
+                                            </div>
+                                        </div>
+                                        <table id="type-id-{{ key }}" class="list table">
+                                            <thead>
+                                            <tr>
+                                                <td class="center">{{ column_general }}</td>
+                                                <td class="center">{{ column_geo_zone }}</td>
+                                                <td class="center">{{ column_cart_value }}</td>
+                                                <td class="center">{{ column_pricing }}</td>
+                                                <td></td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {{ shipmentOption.rows }}
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td colspan="4"></td>
+                                                {% if key == 'DFY' %}
+                                                    <td class="text-right"><a
+                                                                onclick="addRule_2('shipping_parcel_pro_type_id_{{ key }}_rule', 'type-id-{{ key }}');"
+                                                                class="btn btn-primary">{{ button_add_rule }}</a></td>
+                                                {% else %}
+                                                    <td class="text-right"><a
+                                                                onclick="addRule_1('shipping_parcel_pro_type_id_{{ key }}_rule', 'type-id-{{ key }}');"
+                                                                class="btn btn-primary">{{ button_add_rule }}</a></td>
+                                                {% endif %}
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {{ text_copyright }}
+        <script type="text/javascript">
+            {% for key, shipmentOption in config %}
+            var count_type_id_{{ key }}_rule = {{ shipmentOption.count }};
+            {% endfor %}
+
+            function addRule_1(type_id, table_id) {
+                switch (type_id) {
+                        {% for key, shipmentOption in config %}
+                    case "shipping_parcel_pro_type_id_{{ key }}_rule":
+                        rulercounter = count_type_id_{{ key }}_rule;
+                        count_type_id_{{ key }}_rule++;
+                        break;
+                        {% endfor %}
+                }
+
+                html = '<tbody id="' + type_id + rulercounter + '">';
+                html += '  <tr>';
+                html += '    <td class="text-center">';
+                html += '      <div><strong>{{ text_name }}</strong></div>';
+                {% for language in languages %}
+                html += '      <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> <input type="text" name="' + type_id + '[' + rulercounter + '][name][{{ language.code }}]" value="" class="form-control" style="width: 85%; padding:5px; display: inline-block; height: 30px;" /><br />';
+                {% endfor %}
+                html += '      <div class="spacer_1"><strong>{{ text_status }}</strong></div>';
+                html += '      <select name="' + type_id + '[' + rulercounter + '][status]">';
+                html += '        <option value="1" selected="selected">{{ text_enabled }}</option>';
+                html += '        <option value="0">{{ text_disabled }}</option>';
+                html += '      </select>';
+                html += '    </td>';
+                html += '    <td class="center">';
+                html += '      <div class="well well-sm" style="height: 100px; overflow: auto;">';
+
+                {% for geo_zone in geo_zones %}
+                html += '<div class="checkbox" style="padding: 0; min-height: auto;">';
+                html += '<label>';
+                html += '<input type="checkbox" name="' + type_id + '[' + rulercounter + '][geo_zones][]" value="{{ geo_zone.geo_zone_id }}">';
+                html += '</label>';
+                html += '{{ geo_zone.name }}';
+                html += '</div>';
+                {% endfor %}
+                html += '</div>';
+                html += '      <a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', true);">Select All</a> / <a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', false);">Unselect All</a>';
+                html += '    </td>';
+                html += '    <td class="center">';
+                html += '      <table style="margin: 0 auto;">';
+                html += '        <thead>';
+                html += '          <tr>';
+                html += '            <td class="left">&nbsp;</td>';
+                html += '            <td class="center">{{ text_min }}</td>';
+                html += '            <td class="center">{{ text_max }}</td>';
+                html += '          </tr>';
+                html += '        </thead>';
+                html += '        <tbody>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_sub_total }}</td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][total_min]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][total_max]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '          </tr>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_weight }}</td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][weight_min]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][weight_max]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '          </tr>';
+                html += '        </tbody>';
+                html += '      </table>';
+                html += '    </td>';
+                html += '    <td class="center">';
+                html += '      <div><strong>{{ text_shipping_price }}</strong></div>';
+                html += '      <div><input type="text" name="' + type_id + '[' + rulercounter + '][cost]" value="" size="5" class="form-control" style="width: 50%; padding:5px; display: inline-block; height: 30px;"/></div>';
+                html += '    </td>';
+                html += '    <td class="left"><a onclick="$(\'#' + type_id + '' + rulercounter + '\').remove();" class="btn btn-primary">{{ button_remove }}</a></td>';
+                html += '  </tr>';
+                html += '</tbody>';
+
+
+                $('#' + table_id + ' tfoot').before(html);
+            }
+
+            function addRule_2(type_id, table_id) {
+                switch (type_id) {
+                    case "shipping_parcel_pro_type_id_DFY_rule":
+                        rulercounter = count_type_id_DFY_rule;
+                        count_type_id_DFY_rule++;
+                        break;
+                }
+
+                html = '<tbody id="' + type_id + rulercounter + '">';
+                html += '  <tr>';
+                html += '    <td class="text-center">';
+                html += '      <div><strong>{{ text_name }}</strong></div>';
+                {% for language in languages %}
+                html += '      <img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> <input type="text" name="' + type_id + '[' + rulercounter + '][name][{{ language.code }}]" value="" class="form-control" style="width: 85%; padding:5px; display: inline-block; height: 30px;" /><br />';
+                {% endfor %}
+                html += '      <div class="spacer_1"><strong>{{ text_status }}</strong></div>';
+                html += '      <select name="' + type_id + '[' + rulercounter + '][status]">';
+                html += '        <option value="1" selected="selected">{{ text_enabled }}</option>';
+                html += '        <option value="0">{{ text_disabled }}</option>';
+                html += '      </select>';
+                html += '    </td>';
+                html += '    <td class="center">';
+                html += '      <div class="well well-sm" style="height: 100px; overflow: auto;">';
+
+                {% for geo_zone in geo_zones %}
+                html += '<div class="checkbox" style="padding: 0; min-height: auto;">';
+                html += '<label>';
+                html += '<input type="checkbox" name="' + type_id + '[' + rulercounter + '][geo_zones][]" value="{{ geo_zone.geo_zone_id }}">';
+                html += '</label>';
+                html += '{{ geo_zone.name }}';
+                html += '</div>';
+                {% endfor %}
+                html += '</div>';
+                html += '      <a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', true);">Select All</a> / <a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', false);">Unselect All</a>';
+                html += '    </td>';
+                html += '    <td class="center">';
+                html += '      <table style="margin: 0 auto;">';
+                html += '        <thead>';
+                html += '          <tr>';
+                html += '            <td class="left">&nbsp;</td>';
+                html += '            <td class="center">{{ text_min }}</td>';
+                html += '            <td class="center">{{ text_max }}</td>';
+                html += '          </tr>';
+                html += '        </thead>';
+                html += '        <tbody>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_sub_total }}</td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][total_min]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][total_max]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '          </tr>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_weight }}</td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][weight_min]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '            <td class="center"><input type="text" name="' + type_id + '[' + rulercounter + '][weight_max]" value="" size="5" class="form-control" style="width: 75%; padding:5px; display: inline-block; height: 30px;"/></td>';
+                html += '          </tr>';
+                html += '        </tbody>';
+                html += '      </table>';
+                html += '    </td>';
+                html += '    <td class="center">';
+                html += '      <table style="margin: 0 auto;">';
+                html += '        <tbody>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_handtekening }}</td>';
+                html += '            <td class="center">';
+                html += '              <select name="' + type_id + '[' + rulercounter + '][handtekening]">';
+                html += '                <option value="1">{{ text_enabled }}</option>';
+                html += '                <option value="0" selected="selected">{{ text_disabled }}</option>';
+                html += '              </select>';
+                html += '            </td>';
+                html += '          </tr>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_avond }}</td>';
+                html += '            <td class="center">';
+                html += '              <select name="' + type_id + '[' + rulercounter + '][avond]">';
+                html += '                <option value="1">{{ text_enabled }}</option>';
+                html += '                <option value="0" selected="selected">{{ text_disabled }}</option>';
+                html += '              </select>';
+                html += '            </td>';
+                html += '          </tr>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_extrazeker }}</td>';
+                html += '            <td class="center">';
+                html += '              <select name="' + type_id + '[' + rulercounter + '][extrazeker]">';
+                html += '                <option value="1">{{ text_enabled }}</option>';
+                html += '                <option value="0" selected="selected">{{ text_disabled }}</option>';
+                html += '              </select>';
+                html += '            </td>';
+                html += '          </tr>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_nietbijburen }}</td>';
+                html += '            <td class="center">';
+                html += '              <select name="' + type_id + '[' + rulercounter + '][nietbijburen]">';
+                html += '                <option value="1">{{ text_enabled }}</option>';
+                html += '                <option value="0" selected="selected">{{ text_disabled }}</option>';
+                html += '              </select>';
+                html += '            </td>';
+                html += '          </tr>';
+                html += '          <tr>';
+                html += '            <td class="left">{{ entry_brievenbuspakje }}</td>';
+                html += '            <td class="center">';
+                html += '              <select name="' + type_id + '[' + rulercounter + '][brievenbuspakje]">';
+                html += '                <option value="1">{{ text_enabled }}</option>';
+                html += '                <option value="0" selected="selected">{{ text_disabled }}</option>';
+                html += '              </select>';
+                html += '            </td>';
+                html += '          </tr>';
+                html += '        </tbody>';
+                html += '      </table>';
+                html += '    </td>';
+                html += '    <td class="center">';
+                html += '      <div><strong>{{ text_shipping_price }}</strong></div>';
+                html += '      <div><input type="text" name="' + type_id + '[' + rulercounter + '][cost]" value="" size="5" class="form-control" style="width: 50%; padding:5px; display: inline-block; height: 30px;"/></div>';
+                html += '    </td>';
+                html += '    <td class="left"><a onclick="$(\'#' + type_id + '' + rulercounter + '\').remove();" class="btn btn-primary">{{ button_remove }}</a></td>';
+                html += '  </tr>';
+                html += '</tbody>';
+
+
+                $('#' + table_id + ' tfoot').before(html);
+            }
+        </script>
+    </div>
+</div>
+{{ footer }}
