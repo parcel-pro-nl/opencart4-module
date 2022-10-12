@@ -11,6 +11,9 @@ $version = 'v1.0.1';
 // Heading
 $_['heading_title'] = 'Parcel Pro';
 
+//pick up
+$_['pick-up_point']    = 'Ophaallocatie';
+
 // Text
 $_['text_list']    = 'Parcel Pro order submit';
 $_['text_view']    = 'View';

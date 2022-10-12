@@ -60,10 +60,10 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         $data['module_parcelpro_status'] = 0;
         $this->model_setting_setting->editSetting('module_parcelpro', $data);
         $this->load->model('setting/event');
+        
         $this->model_setting_event->deleteEventByCode('parcelpro');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order_list');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order');
-
     }
 
 
@@ -428,6 +428,82 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         $template_code = $template_buffer;
 
         return null;
+    }
+
+    // event handler for admin/view/sale/order_info/before
+    public function addPickupInfo(&$route, &$data, &$template_code = null)
+    {
+        $this->language->load('extension/parcelpro/sale/pp_order');
+        $this->language->get('pick-up_point');
+        $order_id = $data['order_id'];
+
+        $order_query = $this->db->query("SELECT su_pickup_point_address, su_pickup_point_id FROM " . DB_PREFIX . "order WHERE order_id=" . $order_id . " AND su_pickup_point_address IS NOT NULL AND su_pickup_point_id IS NOT NULL");
+
+        if(!empty($order_query->row)){
+            $pickupAddress = json_decode($order_query->row['su_pickup_point_address'], true);
+
+            $data['text_shipping_address'] = $this->language->get('pick-up_point');
+
+            if ($data['payment_firstname'] == "") {
+                $data['payment_firstname'] = $data['shipping_firstname'];
+            }
+
+            $data['shipping_firstname'] = $pickupAddress['firstname'] ?? null;
+
+            if ($data['payment_lastname'] == "") {
+                $data['payment_lastname'] = $data['shipping_lastname'];
+            }
+
+            $data['shipping_lastname'] = $pickupAddress['lastname'] ?? null;
+
+            if ($data['payment_company'] == "") {
+                $data['payment_company'] = $data['shipping_company'];
+            }
+
+            $data['shipping_company'] = '';
+
+
+            if ($data['payment_address_1'] == "") {
+                $data['payment_address_1'] = $data['shipping_address_1'];
+            }
+
+            $data['shipping_address_1'] = $pickupAddress['address_1'] ?? null . ' ' . $pickupAddress['address_2'] ?? null;
+
+            if ($data['payment_address_2'] == "") {
+                $data['payment_address_2'] = $data['shipping_address_2'];
+            }
+
+            $data['shipping_address_2'] = '';
+
+
+            if ($data['payment_postcode'] == "") {
+                $data['payment_postcode'] = $data['shipping_postcode'];
+            }
+
+            $data['shipping_postcode'] = $pickupAddress['postcode'] ?? null;
+
+            if ($data['payment_city'] == "") {
+                $data['payment_city'] = $data['shipping_city'];
+            }
+
+            $data['shipping_city'] = $pickupAddress['city'] ?? null;
+
+
+            if ($data['payment_zone'] == "") {
+                $data['payment_zone'] = $data['shipping_zone'];
+            }
+
+            $data['shipping_zone'] = '';
+
+            if ($data['payment_country'] == "") {
+                $data['payment_country'] = $data['shipping_country'];
+            }
+
+            $data['shipping_country'] = '';
+        }
+
+
+
     }
 
     public function getBarcodes($order_ids = [])
