@@ -46,8 +46,6 @@ class parcelpro extends Controller {
             'status' => 1,
             'sort_order' => 1
         ]);
-
-        $this->checkdb();
     }
 
     public function uninstall()
@@ -539,32 +537,6 @@ class parcelpro extends Controller {
         }
     }
 
-    private function checkdb()
-    {
-        $table = '`' . DB_PREFIX . 'order`';
-        $column = '`su_pickup_point_address`';
-        $sql = "DESC $table $column";
-
-        $query = $this->db->query($sql);
-
-        if (!$query->num_rows) {
-            $sql = "alter table $table add column $column text NULL after `date_modified`";
-
-            $this->db->query($sql);
-        }
-
-        $table = '`' . DB_PREFIX . 'order`';
-        $column = '`su_pickup_point_id`';
-        $sql = "DESC $table $column";
-
-        $query = $this->db->query($sql);
-
-        if (!$query->num_rows) {
-            $sql = "alter table $table add column $column varchar(255) NULL after `date_modified`";
-
-            $this->db->query($sql);
-        }
-    }
 }
 
 ?>
