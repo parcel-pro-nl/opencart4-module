@@ -19,14 +19,6 @@ class ParcelPro extends \Opencart\System\Engine\Controller
     {
         $this->checkdb();
         $this->load->model("setting/event");
-        $this->model_setting_event->addEvent([
-            'code' => 'parcelpro',
-            'description' => '',
-            'trigger' => 'catalog/model/checkout/order/addHistory/after',
-            'action' => 'extension/parcelpro/module/parcelpro/post_order_add',
-            'status' => 1,
-            'sort_order' => 1
-        ]);
 
         $this->model_setting_event->addEvent([
             'code' => 'parcelpro_add_buttons_order_list',
@@ -46,6 +38,15 @@ class ParcelPro extends \Opencart\System\Engine\Controller
             'sort_order' => 1
         ]);
 
+        $this->model_setting_event->addEvent([
+            'code' => 'parcelpro_add_pickup_address_order_info',
+            'description' => '',
+            'trigger' => 'admin/view/sale/order_info/before',
+            'action' => 'extension/parcelpro/module/parcelpro|addPickupInfo',
+            'status' => 1,
+            'sort_order' => 1
+        ]);
+
         // Enable module
         $this->load->model('setting/setting');
 
@@ -61,7 +62,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         $this->model_setting_setting->editSetting('module_parcelpro', $data);
         $this->load->model('setting/event');
         
-        $this->model_setting_event->deleteEventByCode('parcelpro');
+        $this->model_setting_event->deleteEventByCode('parcelpro_add_pickup_address_order_info');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order_list');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order');
     }
