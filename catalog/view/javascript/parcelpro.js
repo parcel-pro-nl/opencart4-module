@@ -171,6 +171,9 @@ $(document).ready(function () {
 
     $("select[name=shipping_method]").on('change', function () {
         const value = $(this).val().slice(0, -2).toLowerCase();
+
+        $('input[name=pp_company]').val('');
+
         ParcelProInitIframe(value);
     });
 

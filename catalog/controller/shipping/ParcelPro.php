@@ -94,6 +94,8 @@ class ParcelPro extends Controller
     // event handler for catalog/controller/checkout/shipping_method/save/before
     public function savePickupPoint(&$route, &$json)
     {
+        unset($this->session->data['pickup_point']);
+
         if (in_array($this->request->post['shipping_method'], $this->pickupOptions) && !empty($this->request->post['pp_company'])) {
             $this->session->data['shipping_address']['zone'] = "";
             if ($this->request->post['pp_firstname'] != "") {
@@ -118,7 +120,7 @@ class ParcelPro extends Controller
                 $this->session->data['pickup_point']['city'] = $this->request->post['pp_city'];
             }
         }else{
-            unset($this->session->data['pickup_point']);
+
         }
     }
 
