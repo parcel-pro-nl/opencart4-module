@@ -74,12 +74,14 @@ function ParcelProPickupPointCard() {
 function ParcelProKiezerUrl() {
     var url = "https://login.parcelpro.nl/plugin/afhaalpunt/parcelpro-kiezer.html";
     var postcode = $("input[name=shipping_postcode]").val() ? $("input[name=shipping_postcode]").val() : $("input[name=shipping_postcode]").val();
+    var country = $("select[name=shipping_country_id]").val() ? $("select[name=shipping_country_id]").val() : $("select[name=shipping_country_id]").val();
+
     url += "?";
     url += "id=" + $("input[name=pp_gebruiker_id]").val();
     url += "&postcode=" + postcode;
+    url += "&country=" + getCountryCode(parseInt(country));
     url += "&origin=" + window.location.protocol + "//" + window.location.hostname;
-
-
+    
     return url;
 }
 
@@ -113,6 +115,65 @@ function ParcelProInitIframe(value, init = false) {
         $('#parcel-pro-pickup-point').show();
     } else {
         $('#parcel-pro-pickup-point').hide();
+    }
+}
+
+function getCountryCode(countryId){
+    switch(countryId){
+        case 14:
+            return 'AT'
+        case 21:
+            return 'BE';
+        case 33:
+            return 'BG';
+        case 53:
+            return 'HR';
+        case 55:
+            return 'CY';
+        case 56:
+            return 'CZ';
+        case 57:
+            return 'DK';
+        case 67:
+            return 'EE';
+        case 72:
+            return 'FI';
+        case 74:
+            return 'FR';
+        case 81:
+            return 'DE';
+        case 84:
+            return 'GR';
+        case 97:
+            return 'HU';
+        case 103:
+            return 'LV';
+        case 117:
+            return 'LT';
+        case 123:
+            return 'LT';
+        case 124:
+            return 'LU';
+        case 132:
+            return 'MT';
+        case 150:
+            return 'NL';
+        case 170:
+            return 'PL';
+        case 171:
+            return 'PT';
+        case 175:
+            return 'RO';
+        case 189:
+            return 'ES';
+        case 190:
+            return 'SK';
+        case 195:
+            return 'SI';
+        case 203:
+            return 'SE';
+        default:
+            return '';
     }
 }
 
