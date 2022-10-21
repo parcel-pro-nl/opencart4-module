@@ -19,7 +19,7 @@ class ParcelPro extends Controller
         $order_id = $this->session->data['order_id'] ?? null;
         // append return $order_info; in catalog/model/checkout/order.php
         $export_status = $this->config->get('shipping_parcel_pro_auto_export_status');
-        if($export_status !== "*" || !empty($export_status)){
+        if(($export_status !== "*" || !empty($export_status)) && $order_id !== null){
 
             $this->load->model('checkout/order');
             $order = $this->model_checkout_order->getOrder($order_id);
