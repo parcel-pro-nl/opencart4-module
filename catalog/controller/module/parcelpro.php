@@ -1,18 +1,35 @@
 <?php
 
-class ControllerExtensionModuleParcelpro extends Controller{
+namespace Opencart\Catalog\Controller\Extension\ParcelPro\Module;
 
-    public function post_order_add($route, $output){
-        $order_id = $output[0];
+use Opencart\System\Engine\Controller;
+use Opencart\System\Engine\Registry;
+use Opencart\System\Library\ParcelPro as ParcelProInstance;
+
+class ParcelPro extends Controller
+{
+    public function __construct(Registry $registry)
+    {
+        parent::__construct($registry);
+        require_once DIR_EXTENSION . 'parcelpro/system/library/ParcelPro.php';
+    }
+
+    // event handler for catalog/controller/checkout/success/before
+    public function submitOrderByStatus($route, $output){
+        $order_id = $this->session->data['order_id'] ?? null;
         // append return $order_info; in catalog/model/checkout/order.php
-        if($this->config->get('parcel_pro_auto_export_status') !== "*"){
+        $export_status = $this->config->get('shipping_parcel_pro_auto_export_status');
+        if($export_status !== "*" || !empty($export_status)){
+
             $this->load->model('checkout/order');
             $order = $this->model_checkout_order->getOrder($order_id);
 
-            if($order['order_status_id'] === $this->config->get('parcel_pro_auto_export_status')){
+            if($order['order_status_id'] === $export_status){
                 if(empty($order['su_order_id'])) {
-                    $ParcelPro_API = Parcelpro::get_instance($this->registry);
+
+                    $ParcelPro_API = ParcelProInstance::get_instance($this->registry);
                     $data = $ParcelPro_API->format_order_data($order);
+
                     if(
                         !empty($data['shipping_firstname'])
                         && !empty($data['shipping_lastname'])

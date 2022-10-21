@@ -47,6 +47,15 @@ class ParcelPro extends \Opencart\System\Engine\Controller
             'sort_order' => 1
         ]);
 
+        $this->model_setting_event->addEvent([
+            'code' => 'parcelpro_submit_order_by_status',
+            'description' => '',
+            'trigger' => 'catalog/controller/checkout/success/before',
+            'action' => 'extension/parcelpro/module/parcelpro|submitOrderByStatus',
+            'status' => 1,
+            'sort_order' => 2
+        ]);
+
         // Enable module
         $this->load->model('setting/setting');
 
@@ -65,6 +74,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         $this->model_setting_event->deleteEventByCode('parcelpro_add_pickup_address_order_info');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order_list');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order');
+        $this->model_setting_event->deleteEventByCode('parcelpro_submit_order_by_status');
     }
 
 
