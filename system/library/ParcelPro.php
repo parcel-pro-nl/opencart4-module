@@ -420,7 +420,7 @@ class ParcelPro
 
     public function current_time()
     {
-        return strftime('%Y-%m-%d %H:%M:%S');
+        return date('Y-m-d H:i:s');
     }
 
     public function saveSuData($order_id, $saving_data)
