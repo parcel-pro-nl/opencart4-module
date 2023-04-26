@@ -1,4 +1,4 @@
-# Parcel Pro plugin for OpenCart 4.0.2.1
+# Parcel Pro plugin for OpenCart 4.0.2.0
 
 ### Plugin possibility:
 - Submit order to Parcel Pro
