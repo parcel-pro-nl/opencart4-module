@@ -51,7 +51,7 @@ class ParcelProOrder extends Model
                 'shipping_city' => $order_query->row['shipping_city'],
                 'shipping_country' => $order_query->row['shipping_country'],
                 'shipping_country_iso_2' => $country_iso_code_2,
-                'shipping_code' => $order_query->row['shipping_code'],
+                'shipping_code' => $order_query->row['shipping_code'] ?? '',
                 'total' => $order_query->row['total'],
                 'su_pickup_point_id' => $order_query->row['su_pickup_point_id'],
                 'su_pickup_point_address' => $order_query->row['su_pickup_point_address'],

@@ -227,10 +227,18 @@ window.addEventListener("message", function (event) {
 }, false);
 
 $(document).ready(function () {
-    const value = $("select[name=shipping_method]").val().slice(0, -2).toLowerCase();
+    const value = $("input#input-shipping-code").val().slice(0, -2).toLowerCase();
+    let currentValue = value;
     ParcelProInitIframe(value, true);
 
-    $("select[name=shipping_method]").on('change', function () {
+    setInterval(function () {
+        if (currentValue != $("input#input-shipping-code").val().slice(0, -2).toLowerCase()) {
+            $("input#input-shipping-code").trigger('change');
+            currentValue = $("input#input-shipping-code").val().slice(0, -2).toLowerCase();
+        }
+    }, 500);
+
+    $("input#input-shipping-code").on('change', function () {
         const value = $(this).val().slice(0, -2).toLowerCase();
 
         $('input[name=pp_company]').val('');
@@ -240,7 +248,7 @@ $(document).ready(function () {
 
     $("#parcel-pro-change-pickupt-point").on('click', function (e) {
         e.preventDefault();
-        const value = $("select[name=shipping_method]").val().slice(0, -2).toLowerCase();
+        const value = $("input#input-shipping-code").val().slice(0, -2).toLowerCase();
 
         ParcelProInitIframe(value);
     })

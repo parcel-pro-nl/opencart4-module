@@ -62,7 +62,7 @@ class ParcelPro extends Model {
 
         if ($quote_data) {
             $method_data = array(
-                'title' =>  $this->shipping_methode_heading,
+                'name' =>  $this->shipping_methode_heading,
                 'quote' => $quote_data,
                 'sort_order' => $this->config->get('shipping_parcel_pro_sort_order'),
                 'error' => false
@@ -112,7 +112,7 @@ class ParcelPro extends Model {
                 $quote_data['shipping_parcel_pro_type_id_' . $id . '_' . $key] = array(
                     'sort_order' => $this->config->get('shipping_parcel_pro_type_id_' . $id . '_sort_order'),
                     'code' => 'parcel_pro.shipping_parcel_pro_type_id_' . $id . '_' . $key,
-                    'title' => !empty($rule['name'][$language_id]) ? $rule['name'][$language_id] :  $this->shipping_methode_heading,
+                    'name' => !empty($rule['name'][$language_id]) ? $rule['name'][$language_id] :  $this->shipping_methode_heading,
                     'cost' => $rule['cost'],
                     'tax_class_id' => $this->config->get('shipping_parcel_pro_type_id_'.$id.'_tax_class_id'),
                     'text' => $this->currency->format($this->tax->calculate($rule['cost'], $this->config->get('shipping_parcel_pro_type_id_' . $id . '_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'])

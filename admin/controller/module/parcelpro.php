@@ -24,7 +24,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
             'code' => 'parcelpro_add_buttons_order_list',
             'description' => '',
             'trigger' => 'admin/view/sale/order_list/before',
-            'action' => 'extension/parcelpro/module/parcelpro|addParcelButtons',
+            'action' => 'extension/parcelpro/module/parcelpro.addParcelButtons',
             'status' => 1,
             'sort_order' => 1
         ]);
@@ -33,7 +33,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
             'code' => 'parcelpro_add_buttons_order',
             'description' => '',
             'trigger' => 'admin/view/sale/order/before',
-            'action' => 'extension/parcelpro/module/parcelpro|addParcelButtonsToOrder',
+            'action' => 'extension/parcelpro/module/parcelpro.addParcelButtonsToOrder',
             'status' => 1,
             'sort_order' => 1
         ]);
@@ -42,7 +42,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
             'code' => 'parcelpro_add_pickup_address_order_info',
             'description' => '',
             'trigger' => 'admin/view/sale/order_info/before',
-            'action' => 'extension/parcelpro/module/parcelpro|addPickupInfo',
+            'action' => 'extension/parcelpro/module/parcelpro.addPickupInfo',
             'status' => 1,
             'sort_order' => 1
         ]);
@@ -51,7 +51,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
             'code' => 'parcelpro_submit_order_by_status',
             'description' => '',
             'trigger' => 'catalog/controller/checkout/success/before',
-            'action' => 'extension/parcelpro/module/parcelpro|submitOrderByStatus',
+            'action' => 'extension/parcelpro/module/parcelpro.submitOrderByStatus',
             'status' => 1,
             'sort_order' => 2
         ]);
@@ -368,8 +368,9 @@ class ParcelPro extends \Opencart\System\Engine\Controller
                                 $('#order').load($('#form-order').attr('data-load'));
 
                             },
-                                    error: function (xhr, ajaxOptions, thrownError) {
-                               
+                            error: function (xhr, ajaxOptions, thrownError) {
+                               $(element).prop('disabled', false);
+                               $('#alert').prepend('<div class=\"alert alert-danger alert-dismissible\"><i class=\"fa-solid fa-circle-exclamation\"></i> Er ging iets mis. Neem contact met ons op. <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\"></button></div>');
                             }
                         });
                    })

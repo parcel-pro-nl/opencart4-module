@@ -24,7 +24,7 @@ class parcelpro extends Controller {
             'code' => 'parcelpro_add_pickup_points',
             'description' => '',
             'trigger' => 'catalog/view/checkout/shipping_method/before',
-            'action' => 'extension/parcelpro/shipping/parcelpro|addPickupPoints',
+            'action' => 'extension/parcelpro/shipping/parcelpro.addPickupPoints',
             'status' => 1,
             'sort_order' => 1
         ]);
@@ -33,7 +33,7 @@ class parcelpro extends Controller {
             'code' => 'parcelpro_save_pickup_point',
             'description' => '',
             'trigger' => 'catalog/controller/checkout/shipping_method|save/after',
-            'action' => 'extension/parcelpro/shipping/parcelpro|savePickupPoint',
+            'action' => 'extension/parcelpro/shipping/parcelpro.savePickupPoint',
             'status' => 1,
             'sort_order' => 1
         ]);
@@ -42,7 +42,7 @@ class parcelpro extends Controller {
             'code' => 'parcelpro_save_pickup_point_to_database',
             'description' => '',
             'trigger' => 'catalog/controller/checkout/success/before',
-            'action' => 'extension/parcelpro/shipping/parcelpro|savePickupPointToDatabase',
+            'action' => 'extension/parcelpro/shipping/parcelpro.savePickupPointToDatabase',
             'status' => 1,
             'sort_order' => 1
         ]);
