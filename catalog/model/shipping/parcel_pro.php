@@ -115,7 +115,7 @@ class ParcelPro extends Model {
                     'name' => !empty($rule['name'][$language_id]) ? $rule['name'][$language_id] :  $this->shipping_methode_heading,
                     'cost' => $rule['cost'],
                     'tax_class_id' => $this->config->get('shipping_parcel_pro_type_id_'.$id.'_tax_class_id'),
-                    'text' => $this->currency->format($this->tax->calculate($rule['cost'], $this->config->get('shipping_parcel_pro_type_id_' . $id . '_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'])
+                    'text' => $this->currency->format($this->tax->calculate((float) $rule['cost'], $this->config->get('shipping_parcel_pro_type_id_' . $id . '_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'])
                 );
             }
         }
