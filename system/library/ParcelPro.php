@@ -69,6 +69,8 @@ class ParcelPro
             }
         }
 
+		$carrier = '';
+
         $DHL = array("DFY", "DFYParcelshop", "Europlus", "Europack");
         if (in_array($shipping_code[6], $DHL)) $carrier = 'DHL';
         $POSTNL = array(3085, 3086, 3087, 3089, 3091, 3189, 3385, 4940, 3533, 2928);
@@ -81,6 +83,8 @@ class ParcelPro
         if (in_array($shipping_code[6], $FADELLO)) $carrier = 'Fadello';
         $VSP = array('VSP2928');
         if (in_array($shipping_code[6], $VSP)) $carrier = 'VSP';
+		$INTRAPOST = array(2, 3, 6, 7, 8, 9);
+		if (in_array($shipping_code[6], $INTRAPOST)) $carrier = 'Intrapost';
 
 
         $handtekening_bij_aflevering = false;
@@ -92,7 +96,6 @@ class ParcelPro
         $verzekerd_bedrag = false;
         $avond_levering = false;
         $brievenbus_pakket = false;
-        $carrier = '';
 
         //PostNL, Pakket + rembours
         if ($order_shipping_type == 'parcel_pro_type_id_2') {
