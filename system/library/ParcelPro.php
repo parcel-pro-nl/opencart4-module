@@ -92,7 +92,7 @@ class ParcelPro
         $verzekerd_bedrag = false;
         $avond_levering = false;
         $brievenbus_pakket = false;
-
+        $carrier = '';
 
         //PostNL, Pakket + rembours
         if ($order_shipping_type == 'parcel_pro_type_id_2') {
