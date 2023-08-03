@@ -69,7 +69,7 @@ class ParcelPro
             }
         }
 
-		$carrier = '';
+	$carrier = '';
 
         $DHL = array("DFY", "DFYParcelshop", "Europlus", "Europack");
         if (in_array($shipping_code[6], $DHL)) $carrier = 'DHL';
@@ -83,8 +83,8 @@ class ParcelPro
         if (in_array($shipping_code[6], $FADELLO)) $carrier = 'Fadello';
         $VSP = array('VSP2928');
         if (in_array($shipping_code[6], $VSP)) $carrier = 'VSP';
-		$INTRAPOST = array(2, 3, 6, 7, 8, 9);
-		if (in_array($shipping_code[6], $INTRAPOST)) $carrier = 'Intrapost';
+	$INTRAPOST = array(2, 3, 6, 7, 8, 9);
+	if (in_array($shipping_code[6], $INTRAPOST)) $carrier = 'Intrapost';
 
 
         $handtekening_bij_aflevering = false;
