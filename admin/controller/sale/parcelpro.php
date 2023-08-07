@@ -112,7 +112,7 @@ class ParcelPro extends Controller
                         'su_order_id' => $submit_result['Id'],
                         'su_url_tracking' => $submit_result['TrackingUrl'],
                         'su_url_label' => $submit_result['LabelUrl'],
-                        'su_barcode' => $submit_result['Barcode'],
+                        'su_barcode' => $submit_result['Barcode'] ?? '',
                         'su_barcodes' => '',
                         'su_colli' => 1,
                     );
