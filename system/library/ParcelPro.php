@@ -48,11 +48,11 @@ class ParcelPro
     }
 
 
-    public function define_shipping_method($chosen_shipping_method)
+    public function define_shipping_method($order)
     {
-
+	$chosen_shipping_method = $order['shipping_code'];
         $shipping_code = explode('_', $chosen_shipping_method);
-
+	
         if ($shipping_code[0] !== 'parcel') return array(
             "shipping_method" => null
         );
@@ -96,6 +96,7 @@ class ParcelPro
         $verzekerd_bedrag = false;
         $avond_levering = false;
         $brievenbus_pakket = false;
+	$order_total = $order['total'] ?? 0;
 
         //PostNL, Pakket + rembours
         if ($order_shipping_type == 'parcel_pro_type_id_2') {
@@ -207,7 +208,7 @@ class ParcelPro
         $hmacSha256 = hash_hmac("sha256", $this->config->get('parcelpro_Id') . $date . $postcode_afzender . $order['shipping_postcode'], $this->config->get('parcelpro_ApiKey'));
 
         // Verzendopties bepalen
-        $shipping_option_data = $this->define_shipping_method($order['shipping_code']);
+        $shipping_option_data = $this->define_shipping_method($order);
 
         $data = array_merge($order, $shipping_option_data);
 
