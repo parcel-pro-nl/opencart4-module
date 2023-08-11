@@ -30,15 +30,6 @@ class parcelpro extends Controller {
         ]);
 
         $this->model_setting_event->addEvent([
-            'code' => 'parcelpro_save_pickup_point',
-            'description' => '',
-            'trigger' => 'catalog/controller/checkout/shipping_method|save/after',
-            'action' => 'extension/parcelpro/shipping/parcelpro.savePickupPoint',
-            'status' => 1,
-            'sort_order' => 1
-        ]);
-
-        $this->model_setting_event->addEvent([
             'code' => 'parcelpro_save_pickup_point_to_database',
             'description' => '',
             'trigger' => 'catalog/controller/checkout/success/before',
@@ -52,7 +43,6 @@ class parcelpro extends Controller {
     {
         $this->load->model('setting/event');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_pickup_points');
-        $this->model_setting_event->deleteEventByCode('parcelpro_save_pickup_point');
         $this->model_setting_event->deleteEventByCode('parcelpro_save_pickup_point_to_database');
     }
 
