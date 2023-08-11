@@ -190,37 +190,36 @@ window.addEventListener("message", function (event) {
             AddressIsParcelshop(msg);
             ParcelProPickupPointCard();
             popup_close();
+			const data = $('#pp-parcelshop-form').serialize() + '&shipping_method=' + $('#input-shipping-code').val();
+
+			chain.attach(function () {
+				return $.ajax({
+					url: 'index.php?route=extension/parcelpro/shipping/parcelpro|savePickupPoint',
+					type: 'post',
+					data: data,
+					dataType: 'json',
+					contentType: 'application/x-www-form-urlencoded',
+					success: function (json) {
+						if (json['redirect']) {
+							location = json['redirect'];
+						}
+
+						if (json['error']) {
+							$('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+						}
+
+						if (json['success']) {
+							$('#alert').prepend('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
+
+							$('#button-payment-method').trigger('click');
+						}
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+					}
+				});
+			});
         }
-
-        chain.attach(function () {
-            return $.ajax({
-                url: 'index.php?route=checkout/shipping_method|save&language={{ language }}',
-                type: 'post',
-                data: $('#form-shipping-method').serialize(),
-                dataType: 'json',
-                contentType: 'application/x-www-form-urlencoded',
-                success: function (json) {
-                    console.log(json);
-
-                    if (json['redirect']) {
-                        location = json['redirect'];
-                    }
-
-                    if (json['error']) {
-                        $('#alert').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa-solid fa-circle-exclamation"></i> ' + json['error'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
-                    }
-
-                    if (json['success']) {
-                        $('#alert').prepend('<div class="alert alert-success alert-dismissible"><i class="fa-solid fa-circle-check"></i> ' + json['success'] + ' <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>');
-
-                        $('#button-payment-method').trigger('click');
-                    }
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-                }
-            });
-        });
     } else {
         console.log(event.origin + "!== https://login.parcelpro.nl");
     }
