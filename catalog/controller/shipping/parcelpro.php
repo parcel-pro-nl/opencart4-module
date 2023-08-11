@@ -29,7 +29,7 @@ class ParcelPro extends Controller
             unset($this->session->data['pickup_point_error']);
         }
 
-        if(in_array($this->session->data['shipping_method'] ?? null, $this->pickupOptions) && isset($this->session->data['pickup_point']['company'])){
+        if(in_array($this->session->data['shipping_method']['code'] ?? null, $this->pickupOptions) && isset($this->session->data['pickup_point']['company'])){
             $data['pp_firstname'] = $this->session->data['pickup_point']['firstname'] ?? null;
             $data['pp_lastname'] = $this->session->data['pickup_point']['lastname'] ?? null;
             $data['pp_company'] = $this->session->data['pickup_point']['company'] ?? null;
@@ -58,7 +58,7 @@ class ParcelPro extends Controller
                         <a href="#" id="parcel-pro-change-pickupt-point">Change pickup location</a>
                       </div>
                     </div>
-                   
+                   	<form id="pp-parcelshop-form">
                       <input type="hidden" name="pp_gebruiker_id" value="{{ gebruiker_id }}">
                       <input type="hidden" name="pp_firstname" value="{{ pp_firstname }}">
                       <input type="hidden" name="pp_lastname" value="{{ pp_lastname }}">
@@ -67,6 +67,7 @@ class ParcelPro extends Controller
                       <input type="hidden" name="pp_address_2" value="{{ pp_address_2 }}">
                       <input type="hidden" name="pp_postcode" value="{{ pp_postcode }}">
                       <input type="hidden" name="pp_city" value="{{ pp_city }}">
+                   </form>
                       <link href="extension/parcelpro/catalog/view/theme/default/stylesheet/parcelpro.css" rel="stylesheet">
                       <script src="extension/parcelpro/catalog/view/javascript/parcelpro.js" type="text/javascript"></script>
                       <div class="global-modal" id="modal">
@@ -91,12 +92,11 @@ class ParcelPro extends Controller
         $template_code = $template_buffer;
     }
 
-    // event handler for catalog/controller/checkout/shipping_method/save/before
-    public function savePickupPoint(&$route, &$json)
+    public function savePickupPoint()
     {
         unset($this->session->data['pickup_point']);
 
-        if (in_array($this->request->post['shipping_method'], $this->pickupOptions) && !empty($this->request->post['pp_company'])) {
+        if (in_array($this->request->post['shipping_method'] ?? '', $this->pickupOptions) && !empty($this->request->post['pp_company'])) {
             $this->session->data['shipping_address']['zone'] = "";
             if ($this->request->post['pp_firstname'] != "") {
                 $this->session->data['pickup_point']['firstname'] = $this->request->post['pp_firstname'];
@@ -119,11 +119,17 @@ class ParcelPro extends Controller
             if ($this->request->post['pp_city'] != "") {
                 $this->session->data['pickup_point']['city'] = $this->request->post['pp_city'];
             }
-        }else{
 
+			$responseData['success']  = 'Pakketpunt opgeslagen.';
+		}else{
+			$responseData['error']  = 'Onjuiste verzendmethode.';
+			unset($this->session->data['pickup_point']);
         }
+        
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($responseData));
     }
-
+    
     // event handler for catalog/controller/checkout/success/before
     public function savePickupPointToDatabase()
     {
