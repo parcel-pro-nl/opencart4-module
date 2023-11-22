@@ -70,7 +70,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         $data['module_parcelpro_status'] = 0;
         $this->model_setting_setting->editSetting('module_parcelpro', $data);
         $this->load->model('setting/event');
-        
+
         $this->model_setting_event->deleteEventByCode('parcelpro_add_pickup_address_order_info');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order_list');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order');
@@ -544,6 +544,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
 
     public function getBarcodes($order_ids = [])
     {
+        // TODO: This errors when no orders exist.
         $order_query = $this->db->query("SELECT order_id, su_barcode FROM " . DB_PREFIX . "order WHERE order_id IN (" . implode(',', $order_ids) . ")");
 
         return array_column($order_query->rows, 'su_barcode', 'order_id');
