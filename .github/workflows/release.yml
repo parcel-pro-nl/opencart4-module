@@ -1,0 +1,17 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./build.sh
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: parcelpro.ocmod.zip
+          generate_release_notes: true
