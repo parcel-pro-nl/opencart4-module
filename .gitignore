@@ -1,1 +1,5 @@
-.idea
+# IDEs
+.idea/
+
+# Build artifacts
+*.zip

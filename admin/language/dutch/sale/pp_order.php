@@ -1,12 +1,12 @@
 <?php
 //==============================================================================
-// Parcel Pro Shipping v1.0.1
+// Parcel Pro Shipping
 //
 // Company: Parcel Pro
 // Contact: info@parcelpro.nl
 //==============================================================================
 
-$version = 'v1.0.1';
+$version = '1.0.0';
 
 // Heading
 $_['heading_title'] = 'Parcel Pro';
