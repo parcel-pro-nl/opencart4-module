@@ -567,7 +567,7 @@ class ParcelPro extends \Opencart\System\Engine\Controller
 <div id="su-barcode" class="col-md">
   <div class="form-control border rounded-start">
     <div class="lead">
-      <strong>TODO: Barcode text</strong>
+      <strong>' . $this->language->get('column_barcode') . '</strong>
       <br/>
       <span id="su-barcode-value">{{ su_barcode }}</span>
     </div>
