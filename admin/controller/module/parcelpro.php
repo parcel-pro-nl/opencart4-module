@@ -537,18 +537,17 @@ class ParcelPro extends \Opencart\System\Engine\Controller
 
             $data['shipping_country'] = '';
         }
-
-
-
     }
 
     public function getBarcodes($order_ids = [])
     {
+        if (empty($order_ids)) {
+            return [];
+        }
+
         // TODO: This errors when no orders exist.
         $order_query = $this->db->query("SELECT order_id, su_barcode FROM " . DB_PREFIX . "order WHERE order_id IN (" . implode(',', $order_ids) . ")");
 
         return array_column($order_query->rows, 'su_barcode', 'order_id');
     }
-
-
 }
