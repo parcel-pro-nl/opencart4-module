@@ -48,6 +48,15 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         ]);
 
         $this->model_setting_event->addEvent([
+            'code' => 'parcelpro_add_barcode_order_info',
+            'description' => '',
+            'trigger' => 'admin/view/sale/order_info/before',
+            'action' => 'extension/parcelpro/module/parcelpro.addBarcode',
+            'status' => 1,
+            'sort_order' => 1
+        ]);
+
+        $this->model_setting_event->addEvent([
             'code' => 'parcelpro_submit_order_by_status',
             'description' => '',
             'trigger' => 'catalog/controller/checkout/success/before',
@@ -74,9 +83,9 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         $this->model_setting_event->deleteEventByCode('parcelpro_add_pickup_address_order_info');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order_list');
         $this->model_setting_event->deleteEventByCode('parcelpro_add_buttons_order');
+        $this->model_setting_event->deleteEventByCode('parcelpro_add_barcode_order_info');
         $this->model_setting_event->deleteEventByCode('parcelpro_submit_order_by_status');
     }
-
 
     public function index()
     {
@@ -292,7 +301,6 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         }
     }
 
-    ////
     // event handler for admin/view/sale/order_list/before
     public function addParcelButtons(&$route, &$data, &$template_code = null)
     {
@@ -539,13 +547,48 @@ class ParcelPro extends \Opencart\System\Engine\Controller
         }
     }
 
+    // event handler for admin/view/sale/order_info/before
+    public function addBarcode($route, &$data, &$template_code = null)
+    {
+        $this->language->load('extension/parcelpro/sale/pp_order');
+        $order_id = $data['order_id'];
+
+        $barcodes = $this->getBarcodes([$order_id]);
+        if (isset($barcodes[$order_id])) {
+            $data['su_barcode'] = $barcodes[$order_id];
+
+            $template = new TemplateBuffer();
+            $template_buffer = $template->getTemplateBuffer($route, $template_code);
+
+            $template_buffer = str_replace(
+                '<div id="payment-method" class="col-md">',
+                '
+{% if su_barcode %}
+<div id="su-barcode" class="col-md">
+  <div class="form-control border rounded-start">
+    <div class="lead">
+      <strong>TODO: Barcode text</strong>
+      <br/>
+      <span id="su-barcode-value">{{ su_barcode }}</span>
+    </div>
+  </div>
+</div>
+{% endif %}
+<div id="payment-method" class="col-md">
+',
+                $template_buffer
+            );
+
+            $template_code = $template_buffer;
+        }
+    }
+
     public function getBarcodes($order_ids = [])
     {
         if (empty($order_ids)) {
             return [];
         }
 
-        // TODO: This errors when no orders exist.
         $order_query = $this->db->query("SELECT order_id, su_barcode FROM " . DB_PREFIX . "order WHERE order_id IN (" . implode(',', $order_ids) . ")");
 
         return array_column($order_query->rows, 'su_barcode', 'order_id');
