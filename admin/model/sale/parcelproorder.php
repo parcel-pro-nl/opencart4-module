@@ -3,7 +3,7 @@
 namespace Opencart\Admin\Model\Extension\ParcelPro\Sale;
 
 //==============================================================================
-// Parel Pro Shipping v1.0.1
+// Parel Pro Shipping
 //
 // Company: Parcel Pro
 // Contact: info@parcelpro.nl
