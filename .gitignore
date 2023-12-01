@@ -3,3 +3,6 @@
 
 # Build artifacts
 *.zip
+
+# Cookie jar for curl in install script
+cookies.txt
