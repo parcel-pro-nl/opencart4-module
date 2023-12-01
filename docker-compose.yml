@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  opencart4:
+    image: bitnami/opencart:4
+    container_name: opencart4
+    ports:
+      - '80:8080'
+    environment:
+      OPENCART_HOST: localhost
+      OPENCART_DATABASE_HOST: db
+      OPENCART_DATABASE_PORT_NUMBER: 3306
+      OPENCART_DATABASE_USER: opencart
+      OPENCART_DATABASE_PASSWORD: opencart
+      OPENCART_DATABASE_NAME: opencart
+      ALLOW_EMPTY_PASSWORD: yes
+      OPENCART_USERNAME: admin
+      OPENCART_PASSWORD: parcelpro1
+    depends_on:
+      - db
+  db:
+    image: mariadb:11
+    ports:
+      - '3306:3306'
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: yes
+      MARIADB_USER: opencart
+      MARIADB_PASSWORD: opencart
+      MARIADB_DATABASE: opencart
+    volumes:
+      - 'db_data:/var/lib/mysql'
+
+volumes:
+  db_data:
+    driver: local
