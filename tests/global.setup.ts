@@ -12,6 +12,10 @@ test('login', async ({ page }) => {
 
   await expect(page).toHaveTitle(/Dashboard/);
 
+  // Store the user token query parameter in the env, for later use.
+  const params = new URLSearchParams(page.url().split('?')[1]);
+  process.env.OC_USER_TOKEN = params.get('user_token');
+
   // Parcel Pro
 
   await page.goto('https://login.parcelpro.nl');
