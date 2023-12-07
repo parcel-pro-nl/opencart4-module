@@ -46,7 +46,10 @@ jobs:
         npx playwright install chromium --with-deps
       working-directory: tests
     - name: Setup
-      run: ./install.sh
+      run: |
+        wget -qO htmlq.tar.gz https://github.com/mgdm/htmlq/releases/latest/download/htmlq-x86_64-linux.tar.gz
+        sudo tar xf htmlq.tar.gz -C /usr/local/bin
+        ./install.sh
     - run: npm test
       working-directory: tests
       env:
