@@ -1,0 +1,16 @@
+{
+  "name": "woocommerce-plugin-tests",
+  "scripts": {
+    "start": "playwright test --headed",
+    "start:single": "playwright test --headed --workers 1",
+    "test": "playwright test",
+    "lint": "prettier -c **.ts",
+    "format": "prettier -w **.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.39.0",
+    "@types/node": "^20.8.8",
+    "dotenv": "^16.3.1",
+    "prettier": "^3.0.3"
+  }
+}
