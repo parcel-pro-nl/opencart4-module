@@ -19,3 +19,19 @@ test('configure geo zones', async ({ page }) => {
     await page.locator('button[type="submit"]').click();
   }
 });
+
+test('configure Parcel Pro module', async ({page}) => {
+  // Get the user id and api key from Parcel Pro.
+  await page.goto('https://login.parcelpro.nl/koppeling/single.php?type=api');
+  const userId = await page
+    .locator('[data-bind="value: LoginId "]')
+    .inputValue();
+  const apiKey = await page
+    .locator('[data-bind="value: ApiKey "]')
+    .inputValue();
+
+  await navigateAdmin(page, 'extension/parcelpro/module/parcelpro');
+  await page.locator('#parcelpro_Id').fill(userId);
+  await page.locator('#parcelpro_ApiKey').fill(apiKey);
+  await page.locator('button[type="submit"]').click();
+});
