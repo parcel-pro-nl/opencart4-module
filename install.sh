@@ -47,7 +47,7 @@ function findExtensionId() {
 
 # Get the current extension id, check if it exists.
 extensionId="$(findExtensionId)"
-if [ -n "${extensionId+x}" ]
+if [ -n "$extensionId" ]
 then
     echo "Removing existing extension (id $extensionId)"
 

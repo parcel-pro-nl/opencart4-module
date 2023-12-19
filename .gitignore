@@ -6,3 +6,12 @@
 
 # Cookie jar for curl in install script
 cookies.txt
+
+# Dev setup
+.env
+
+# Playwright
+node_modules/
+playwright-storage/
+playwright-report/
+test-results/
